@@ -667,7 +667,7 @@
         .dot-youtube { background: #ef4444; }
         .dot-web { background: #94a3b8; }
 
-        /* Title & Shortened URL Preview */
+        /* Title */
         .card-main {
             display: flex;
             flex-direction: column;
@@ -685,25 +685,6 @@
             transition: color 0.15s ease;
         }
         a.card-title:hover { color: var(--teal); }
-
-        .card-url-preview {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.74rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            max-width: 100%;
-            min-width: 0;
-            transition: color 0.15s ease;
-        }
-        .card-url-preview:hover { color: var(--teal); }
-
-        .card-url-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
 
         .card-note {
             font-size: 0.81rem;
@@ -2400,20 +2381,6 @@
             }
         }
 
-        function shortenUrlDisplay(raw) {
-            const safe = sanitizeUrl(raw);
-            if (!safe) return String(raw || "");
-            try {
-                const u = new URL(safe);
-                const host = u.hostname.replace(/^(www\.|m\.|mobile\.)/i, "");
-                let path = u.pathname.replace(/\/+$/, "");
-                if (path.length > 32) path = path.slice(0, 30) + "…";
-                return host + path;
-            } catch (e) {
-                return safe.length > 48 ? safe.slice(0, 46) + "…" : safe;
-            }
-        }
-
         function detectPlatform(url) {
             const l = String(url || "").toLowerCase();
             if (l.includes("facebook.com") || l.includes("fb.watch") || l.includes("fb.com") || l.includes("fb.me")) {
@@ -3028,7 +2995,6 @@
             const cat = mapCategory(item.category);
             const plat = detectPlatform(item.url);
             const href = sanitizeUrl(item.url);
-            const shortUrl = shortenUrlDisplay(item.url);
 
             const badgesHtml =
                 '<div class="card-badges">' +
@@ -3045,13 +3011,6 @@
                     (href
                         ? '<a href="' + esc(href) + '" target="_blank" rel="noopener noreferrer" class="card-title">' + esc(item.title) + '</a>'
                         : '<div class="card-title">' + esc(item.title) + '</div>'
-                    ) +
-                    (shortUrl
-                        ? '<a href="' + esc(href || "#") + '" target="_blank" rel="noopener noreferrer" class="card-url-preview">' +
-                              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" style="flex-shrink:0;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>' +
-                              '<span class="card-url-text">' + esc(shortUrl) + '</span>' +
-                          '</a>'
-                        : ''
                     ) +
                 '</div>';
 
