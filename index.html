@@ -470,6 +470,10 @@
             border-color: var(--orange);
             color: #ffffff;
         }
+        .chip-sm {
+            padding: 5px 11px;
+            font-size: 0.74rem;
+        }
 
         .feed-meta {
             display: flex;
@@ -1523,6 +1527,9 @@
                         <span id="lblHomeReset">Reset</span>
                     </button>
                 </div>
+
+                <!-- Row 3 (Auto): District / Area Filter Chips when a State is selected -->
+                <div id="homeDistrictChips" class="chip-scroll hidden" role="tablist"></div>
             </div>
 
             <!-- Clean Vertical Feed of Compact Scannable Cards -->
@@ -1812,10 +1819,17 @@
                         <div id="catSelectorGrid" class="cat-selector-grid" role="radiogroup"></div>
                     </div>
 
-                    <!-- 4. Negeri / State -->
-                    <div class="form-field">
-                        <label for="fieldState" id="lblFieldState" class="field-lbl"></label>
-                        <select id="fieldState" class="select-field"></select>
+                    <!-- 4. Negeri / State & Daerah / Kawasan -->
+                    <div class="grid-2">
+                        <div class="form-field">
+                            <label for="fieldState" id="lblFieldState" class="field-lbl"></label>
+                            <select id="fieldState" class="select-field"></select>
+                        </div>
+                        <div class="form-field">
+                            <label for="fieldDistrict" id="lblFieldDistrict" class="field-lbl"></label>
+                            <input type="text" id="fieldDistrict" class="input-field" list="districtSuggestions" autocomplete="off">
+                            <datalist id="districtSuggestions"></datalist>
+                        </div>
                     </div>
 
                     <!-- 5. Nota Ringkas / Short Note -->
@@ -2024,6 +2038,27 @@
             "Luar Negara": ["thailand", "hatyai", "hat yai", "bangkok", "krabi", "phuket", "danok", "betong", "indonesia", "bali", "bandung", "jakarta", "singapore", "singapura", "jepun", "japan", "tokyo", "osaka", "korea", "seoul", "vietnam", "london", "swiss", "turki", "istanbul", "australia", "overseas"]
         };
 
+        // Popular districts & areas per state for autocomplete suggestions & auto-detection
+        const STATE_DISTRICTS = {
+            "Johor": ["Johor Bahru", "Batu Pahat", "Muar", "Kluang", "Kulai", "Kota Tinggi", "Mersing", "Pontian", "Segamat", "Tangkak", "Desaru", "Iskandar Puteri", "Pasir Gudang", "Skudai", "Yong Peng"],
+            "Kedah": ["Langkawi", "Alor Setar", "Sungai Petani", "Kulim", "Jitra", "Kubang Pasu", "Baling", "Yan", "Pendang", "Sik", "Padang Terap", "Pokok Sena", "Bandar Baharu"],
+            "Kelantan": ["Kota Bharu", "Bachok", "Pasir Mas", "Tumpat", "Pasir Puteh", "Machang", "Tanah Merah", "Kuala Krai", "Gua Musang", "Jeli", "Rantau Panjang"],
+            "Melaka": ["Melaka Tengah", "Bandar Hilir", "Alor Gajah", "Jasin", "Ayer Keroh", "Klebang", "Jonker Street", "Masjid Tanah"],
+            "Negeri Sembilan": ["Seremban", "Port Dickson", "Nilai", "Kuala Pilah", "Rembau", "Tampin", "Jempol", "Jelebu", "Senawang"],
+            "Pahang": ["Kuantan", "Cameron Highlands", "Bentong", "Genting Highlands", "Janda Baik", "Temerloh", "Raub", "Jerantut", "Pekan", "Rompin", "Lipis", "Bera", "Maran", "Cherating", "Bukit Tinggi", "Fraser's Hill"],
+            "Perak": ["Ipoh", "Taiping", "Lumut", "Pangkor", "Teluk Intan", "Kuala Kangsar", "Kampar", "Gopeng", "Tanjung Malim", "Sitiawan", "Seri Iskandar", "Batu Gajah", "Sungkai", "Lenggong", "Gerik", "Tapah", "Tambun"],
+            "Perlis": ["Kangar", "Arau", "Padang Besar", "Kuala Perlis", "Wang Kelian", "Timah Tasoh"],
+            "Pulau Pinang": ["George Town", "Batu Ferringhi", "Bayan Lepas", "Balik Pulau", "Butterworth", "Bukit Mertajam", "Seberang Perai", "Nibong Tebal", "Kepala Batas", "Tanjung Bungah"],
+            "Sabah": ["Kota Kinabalu", "Kundasang", "Ranau", "Semporna", "Sandakan", "Tawau", "Lahad Datu", "Keningau", "Kudat", "Papar", "Tuaran", "Penampang", "Kota Belud", "Beaufort"],
+            "Sarawak": ["Kuching", "Miri", "Sibu", "Bintulu", "Samarahan", "Serian", "Sri Aman", "Sarikei", "Kapit", "Limbang", "Lawas", "Mukah", "Santubong", "Mulu"],
+            "Selangor": ["Shah Alam", "Petaling Jaya", "Subang Jaya", "Klang", "Kajang", "Bangi", "Puchong", "Cyberjaya", "Sepang", "Rawang", "Ampang", "Gombak", "Hulu Langat", "Kuala Selangor", "Sekinchan", "Sabak Bernam", "Banting", "Kuala Langat", "Seri Kembangan", "Sungai Buloh", "Setia Alam", "Damansara", "Cheras"],
+            "Terengganu": ["Kuala Terengganu", "Kuala Nerus", "Kemaman", "Dungun", "Marang", "Besut", "Setiu", "Hulu Terengganu", "Tasik Kenyir", "Pulau Redang", "Pulau Perhentian", "Pulau Kapas"],
+            "WP Kuala Lumpur": ["Bukit Bintang", "KLCC", "Bangsar", "Kampung Baru", "Mont Kiara", "Setapak", "Wangsa Maju", "Cheras", "Kepong", "TTDI", "Brickfields", "Titiwangsa", "Sentul", "Seputeh"],
+            "WP Labuan": ["Bandar Labuan", "Layang-Layangan", "Pohon Batu", "Rancha-Rancha"],
+            "WP Putrajaya": ["Presint 1", "Presint 2", "Presint 8", "Presint 9", "Presint 14", "Presint 15", "Presint 16", "IOI Resort City"],
+            "Luar Negara": ["Hatyai", "Bangkok", "Krabi", "Phuket", "Betong", "Danok", "Singapura", "Bali", "Bandung", "Jakarta", "Tokyo", "Osaka", "Seoul", "London", "Istanbul"]
+        };
+
         // =====================================================================
         // 3. COMPLETE BILINGUAL DICTIONARY (BM & EN)
         // =====================================================================
@@ -2049,9 +2084,10 @@
                 catAll: "Semua",
                 cats: { makan: "Makan", tempat: "Tempat", aktiviti: "Aktiviti" },
                 allStates: "Semua Negeri",
+                allDistricts: "Semua Daerah",
                 allPlatforms: "Semua Platform",
 
-                expSearchPh: "Cari tajuk, negeri, nota, link...",
+                expSearchPh: "Cari tajuk, daerah, negeri, nota, link...",
                 lblExpCat: "Kategori",
                 lblExpState: "Negeri / Lokasi",
                 lblExpPlat: "Platform",
@@ -2111,6 +2147,8 @@
                 phTitle: "cth: Kopi Sawah Sekinchan / Villa Janda Baik",
                 lblCat: "Kategori",
                 lblState: "Negeri",
+                lblDistrict: "Daerah / Kawasan",
+                phDistrict: "cth: Sekinchan, Bangi, Ipoh",
                 lblNotes: "Nota Ringkas (Pilihan)",
                 phNotes: "cth: Datang pagi, laksa padu, parking senang...",
                 btnCancel: "Batal",
@@ -2217,9 +2255,10 @@
                 catAll: "All",
                 cats: { makan: "Food", tempat: "Places", aktiviti: "Activities" },
                 allStates: "All States",
+                allDistricts: "All Districts",
                 allPlatforms: "All Platforms",
 
-                expSearchPh: "Search title, state, notes, link...",
+                expSearchPh: "Search title, district, state, notes, link...",
                 lblExpCat: "Category",
                 lblExpState: "State / Location",
                 lblExpPlat: "Platform",
@@ -2279,6 +2318,8 @@
                 phTitle: "e.g., Kopi Sawah Sekinchan / Janda Baik Villa",
                 lblCat: "Category",
                 lblState: "State",
+                lblDistrict: "District / Area",
+                phDistrict: "e.g., Sekinchan, Bangi, Ipoh",
                 lblNotes: "Short Note (Optional)",
                 phNotes: "e.g., Arrive early, great laksa, easy parking...",
                 btnCancel: "Cancel",
@@ -2380,9 +2421,10 @@
             },
             items: [],
             legacyPaths: new Map(), // Tracks legacy /places/ or root keys for clean delete/update
-            // Home Filters (Category + Direct State)
+            // Home Filters (Category + Direct State + District Chips)
             homeCat: "all",
             homeState: "all",
+            homeDistrict: "all",
             // Search / Explore Filters
             expSearch: "",
             expCat: "all",
@@ -2401,7 +2443,8 @@
             spinTimer: null,
             spinWinner: null,
             userEditedCat: false,
-            userEditedState: false
+            userEditedState: false,
+            userEditedDistrict: false
         };
 
         const $ = (id) => document.getElementById(id);
@@ -2477,6 +2520,15 @@
             return k;
         }
 
+        /** Formats "District, State" cleanly for badges, share texts, and cards */
+        function formatLocation(item) {
+            const stLabel = labelState(item && item.state);
+            const dist = String((item && item.district) || "").trim();
+            if (!dist) return stLabel;
+            if (dist.toLowerCase() === stLabel.toLowerCase()) return stLabel;
+            return dist + ", " + stLabel;
+        }
+
         function sanitizeUrl(raw) {
             if (!raw) return "";
             let txt = String(raw).trim();
@@ -2531,6 +2583,21 @@
             return "";
         }
 
+        /** Auto-detects Malaysian district/area name from pasted text or WhatsApp chat */
+        function guessDistrict(text, stateHint) {
+            const l = String(text || "").toLowerCase();
+            if (!l) return "";
+            const stateList = (stateHint && STATE_DISTRICTS[stateHint]) ? [stateHint] : STATES;
+            for (let i = 0; i < stateList.length; i++) {
+                const dists = (STATE_DISTRICTS[stateList[i]] || []).slice().sort((a, b) => b.length - a.length);
+                for (let j = 0; j < dists.length; j++) {
+                    const kw = dists[j].toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                    if (new RegExp("\\b" + kw + "\\b", "i").test(l)) return dists[j];
+                }
+            }
+            return "";
+        }
+
         function guessCategory(text) {
             const l = String(text || "").toLowerCase();
             if (/(hiking|kayak|atv|snorkeling|diving|camping|workshop|bowling|karaoke|theme park|waterpark|taman tema|escape room|aktiviti|activity|piknik|picnic|jogging|cycling|berbasikal|memancing|fishing|zoo|muzium)/i.test(l)) {
@@ -2553,12 +2620,14 @@
             const plat = detectPlatform(safeUrl);
             const rawTitle = raw && (raw.title !== undefined ? raw.title : raw.name);
             const rawNotes = raw && (raw.notes !== undefined ? raw.notes : raw.note);
+            const rawDistrict = raw && (raw.district !== undefined ? raw.district : (raw.daerah !== undefined ? raw.daerah : raw.area));
             return {
                 id: String((raw && raw.id) || fallbackId || genId()),
                 title: String(rawTitle || "Tanpa Tajuk").trim(),
                 url: safeUrl,
                 category: mapCategory(raw && raw.category),
                 state: mapState(raw && raw.state),
+                district: String(rawDistrict || "").trim(),
                 notes: String(rawNotes || "").trim(),
                 platform: (raw && raw.platform) || plat.id,
                 createdAt: Number(raw && raw.createdAt) || now,
@@ -2964,6 +3033,13 @@
             }).join("");
         }
 
+        /** Updates the datalist suggestions for Daerah / Kawasan based on selected Negeri */
+        function populateDistrictDatalist(stateVal) {
+            const st = mapState(stateVal);
+            const suggestions = STATE_DISTRICTS[st] || [];
+            $("districtSuggestions").innerHTML = suggestions.map((d) => '<option value="' + esc(d) + '"></option>').join("");
+        }
+
         function populateSelects() {
             const d = t();
             const catOpts = CATEGORIES.map((c) => '<option value="' + c + '">' + esc(labelCat(c)) + '</option>').join("");
@@ -2974,6 +3050,7 @@
             const pSt = $("fieldState").value || "Selangor";
             $("fieldState").innerHTML = stateOpts;
             $("fieldState").value = STATES.includes(pSt) ? pSt : "Selangor";
+            populateDistrictDatalist($("fieldState").value);
 
             // Search Tab State, Platform & Sort Dropdowns
             $("expStateSelect").innerHTML = '<option value="all">' + esc(d.allStates) + '</option>' + stateOpts;
@@ -3076,6 +3153,8 @@
             $("fieldTitle").placeholder = d.phTitle;
             $("lblFieldCat").textContent = d.lblCat;
             $("lblFieldState").textContent = d.lblState;
+            $("lblFieldDistrict").textContent = d.lblDistrict;
+            $("fieldDistrict").placeholder = d.phDistrict;
             $("lblFieldNotes").textContent = d.lblNotes;
             $("fieldNotes").placeholder = d.phNotes;
             $("btnCancelPlace").textContent = d.btnCancel;
@@ -3134,7 +3213,7 @@
                     '<span class="cat-pill cat-' + cat + '">' + CAT_ICONS[cat] + '<span>' + esc(labelCat(cat)) + '</span></span>' +
                     '<span class="state-pill">' +
                         '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>' +
-                        esc(labelState(item.state)) +
+                        esc(formatLocation(item)) +
                     '</span>' +
                     '<span class="plat-pill"><span class="plat-dot ' + plat.dot + '"></span>' + esc(plat.label) + '</span>' +
                 '</div>';
@@ -3269,15 +3348,55 @@
             // Row 2: Direct State (Negeri) Dropdown + Quick Reset Chip
             renderHomeStateSelect();
 
+            // Row 3: Dynamic District / Area Chips when a specific State is selected
+            const distWrap = $("homeDistrictChips");
+            if (state.homeState !== "all") {
+                const distMap = new Map();
+                state.items.forEach((it) => {
+                    if (state.homeCat !== "all" && it.category !== state.homeCat) return;
+                    if (it.state !== state.homeState) return;
+                    const dist = String(it.district || "").trim();
+                    if (!dist) return;
+                    const key = dist.toLowerCase();
+                    const prev = distMap.get(key);
+                    if (prev) prev.count++;
+                    else distMap.set(key, { key: key, label: dist, count: 1 });
+                });
+
+                const distList = Array.from(distMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+                if (state.homeDistrict !== "all" && !distMap.has(state.homeDistrict)) {
+                    state.homeDistrict = "all";
+                }
+
+                if (distList.length > 0) {
+                    distWrap.innerHTML =
+                        '<button type="button" class="chip chip-sm' + (state.homeDistrict === "all" ? " active-teal" : "") + '" data-home-district="all">' + esc(d.allDistricts) + '</button>' +
+                        distList.map((dl) =>
+                            '<button type="button" class="chip chip-sm' + (state.homeDistrict === dl.key ? " active-teal" : "") + '" data-home-district="' + esc(dl.key) + '">' +
+                                esc(dl.label) + ' (' + dl.count + ')' +
+                            '</button>'
+                        ).join("");
+                    distWrap.classList.remove("hidden");
+                } else {
+                    distWrap.innerHTML = "";
+                    distWrap.classList.add("hidden");
+                }
+            } else {
+                state.homeDistrict = "all";
+                distWrap.innerHTML = "";
+                distWrap.classList.add("hidden");
+            }
+
             const list = state.items
                 .filter((it) => {
                     if (state.homeCat !== "all" && it.category !== state.homeCat) return false;
                     if (state.homeState !== "all" && it.state !== state.homeState) return false;
+                    if (state.homeDistrict !== "all" && String(it.district || "").trim().toLowerCase() !== state.homeDistrict) return false;
                     return true;
                 })
                 .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            const hasFilter = state.homeCat !== "all" || state.homeState !== "all";
+            const hasFilter = state.homeCat !== "all" || state.homeState !== "all" || state.homeDistrict !== "all";
             $("btnHomeReset").classList.toggle("hidden", !hasFilter);
 
             if (list.length === 0) {
@@ -3310,7 +3429,7 @@
                 if (state.expState !== "all" && it.state !== state.expState) return false;
                 if (state.expPlat !== "all" && detectPlatform(it.url).id !== state.expPlat) return false;
                 if (q) {
-                    const hay = (it.title + " " + it.notes + " " + it.state + " " + labelState(it.state) + " " + it.category + " " + labelCat(it.category) + " " + it.url).toLowerCase();
+                    const hay = (it.title + " " + it.notes + " " + (it.district || "") + " " + it.state + " " + labelState(it.state) + " " + it.category + " " + labelCat(it.category) + " " + it.url).toLowerCase();
                     if (!hay.includes(q)) return false;
                 }
                 return true;
@@ -3420,20 +3539,40 @@
         }
 
         // =====================================================================
-        // 12. MODALS: STREAMLINED ADD/EDIT, WHATSAPP IMPORTER, NAV & DELETE
+        // 12. MODALS (SHEETS, MAPS/WAZE, WHATSAPP SHARE, ADD/EDIT & WA IMPORTER)
         // =====================================================================
-        function openSheet(id) { $(id).classList.remove("hidden"); }
-        function closeSheet(id) { $(id).classList.add("hidden"); }
+        function openSheet(id) {
+            const el = $(id);
+            if (!el) return;
+            el.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        }
 
-        /** Builds a smart search query from Title + State for Google Maps & Waze */
+        function closeSheet(id) {
+            const el = $(id);
+            if (!el) return;
+            el.classList.add("hidden");
+            const anyOpen = ["placeSheet", "waSheet", "deleteSheet", "navSheet"].some((k) => {
+                const node = $(k);
+                return node && !node.classList.contains("hidden");
+            });
+            if (!anyOpen) document.body.style.overflow = "";
+        }
+
+        /** Builds a smart search query from Title + District + State for Google Maps & Waze */
         function buildNavQuery(item) {
             const title = String((item && item.title) || "").trim();
+            const dist = String((item && item.district) || "").trim();
             const st = mapState(item && item.state);
-            if (!title) return st === "Luar Negara" ? "" : st;
-            if (st === "Luar Negara") return title;
-            const stClean = st.replace(/^WP\s+/i, "");
-            if (title.toLowerCase().includes(stClean.toLowerCase())) return title;
-            return title + ", " + stClean;
+            const parts = [];
+            if (title) parts.push(title);
+            if (dist && !title.toLowerCase().includes(dist.toLowerCase())) parts.push(dist);
+            if (st !== "Luar Negara") {
+                const stClean = st.replace(/^WP\s+/i, "");
+                const joined = parts.join(" ").toLowerCase();
+                if (!joined.includes(stClean.toLowerCase())) parts.push(stClean);
+            }
+            return parts.join(", ");
         }
 
         /** Updates Google Maps & Waze deep-link URLs from the editable search input */
@@ -3456,7 +3595,7 @@
             const d = t();
             const lines = [];
             if (isSpinWinner) lines.push(d.waSpinPrefix.trim());
-            lines.push("📍 *" + item.title + "* (" + labelState(item.state) + ")");
+            lines.push("📍 *" + item.title + "* (" + formatLocation(item) + ")");
             lines.push("🏷️ " + labelCat(item.category));
             if (item.notes) lines.push("📝 " + item.notes);
             const href = sanitizeUrl(item.url);
@@ -3477,7 +3616,14 @@
             if (autoGuess) {
                 if (!state.userEditedState) {
                     const st = guessState(val);
-                    if (st) $("fieldState").value = st;
+                    if (st) {
+                        $("fieldState").value = st;
+                        populateDistrictDatalist(st);
+                    }
+                }
+                if (!state.userEditedDistrict && !$("fieldDistrict").value.trim()) {
+                    const dist = guessDistrict(val, $("fieldState").value);
+                    if (dist) $("fieldDistrict").value = dist;
                 }
                 if (!state.userEditedCat) {
                     const ct = guessCategory(val);
@@ -3499,6 +3645,7 @@
             $("placeForm").reset();
             state.userEditedCat = Boolean(editItem);
             state.userEditedState = Boolean(editItem);
+            state.userEditedDistrict = Boolean(editItem && editItem.district);
 
             if (editItem) {
                 $("placeSheetTitle").textContent = d.editTitle;
@@ -3508,6 +3655,7 @@
                 $("fieldTitle").value = editItem.title;
                 $("fieldCategory").value = mapCategory(editItem.category);
                 $("fieldState").value = mapState(editItem.state);
+                $("fieldDistrict").value = editItem.district || "";
                 $("fieldNotes").value = editItem.notes || "";
             } else {
                 $("placeSheetTitle").textContent = d.addTitle;
@@ -3515,8 +3663,10 @@
                 $("fieldId").value = "";
                 $("fieldCategory").value = "makan";
                 $("fieldState").value = "Selangor";
+                $("fieldDistrict").value = "";
             }
 
+            populateDistrictDatalist($("fieldState").value);
             renderModalCatSelector();
             updateUrlHints($("fieldUrl").value, false);
             openSheet("placeSheet");
@@ -3563,6 +3713,8 @@
 
                     const dup = existing.has(key);
                     const plat = detectPlatform(safe);
+                    const detectedState = guessState(clean + " " + safe) || "Selangor";
+                    const detectedDistrict = guessDistrict(clean + " " + safe, detectedState);
                     out.push({
                         selected: !dup,
                         isDup: dup,
@@ -3570,7 +3722,8 @@
                         url: safe,
                         plat: plat,
                         category: guessCategory(clean + " " + safe),
-                        state: guessState(clean + " " + safe) || "Selangor",
+                        state: detectedState,
+                        district: detectedDistrict,
                         notes: clean.length > 76 ? clean : ""
                     });
                 });
@@ -3614,6 +3767,7 @@
                                 STATES.map((s) => '<option value="' + esc(s) + '"' + (it.state === s ? " selected" : "") + '>' + esc(labelState(s)) + '</option>').join("") +
                             '</select>' +
                         '</div>' +
+                        '<input type="text" class="input-field" style="padding:6px 9px; font-size:0.76rem;" data-wa-district="' + idx + '" value="' + esc(it.district || "") + '" placeholder="' + esc(d.lblDistrict + " (" + d.phDistrict + ")") + '">' +
                     '</div>' +
                 '</div>'
             )).join("");
@@ -3647,6 +3801,7 @@
                 url: c.url,
                 category: c.category,
                 state: c.state,
+                district: String(c.district || "").trim(),
                 notes: c.notes || "",
                 platform: c.plat.id,
                 createdAt: base + (chosen.length - idx),
@@ -3782,7 +3937,7 @@
             $("btnThemeToggle").addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark", true));
             $("btnManualSync").addEventListener("click", () => fetchCloud({ force: true, spin: true, toastOk: true, toastErr: true }));
             $("syncPillBtn").addEventListener("click", () => {
-                if (state.syncState === "error") {
+                if (state.syncState === "error" || state.syncState === "notfound") {
                     switchTab("settings");
                     $("rulesDetailsBox").open = true;
                 } else {
@@ -3790,16 +3945,13 @@
                 }
             });
 
-            // Bottom Navigation Bar Tabs & Center Floating "+" Button
+            // Bottom Navigation Bar (4 Tabs + Floating Center "+" Button)
             document.querySelectorAll(".nav-tab").forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    const tab = btn.getAttribute("data-tab");
-                    if (tab) switchTab(tab);
-                });
+                btn.addEventListener("click", () => switchTab(btn.getAttribute("data-tab")));
             });
             $("btnNavAdd").addEventListener("click", () => openPlaceSheet(null));
 
-            // Home Tab Category Chips & Direct State Selector
+            // Home Tab Category Chips, Direct State Selector & District Chips
             $("homeCatChips").addEventListener("click", (e) => {
                 const btn = e.target.closest("[data-home-cat]");
                 if (!btn) return;
@@ -3808,11 +3960,19 @@
             });
             $("homeStateSelect").addEventListener("change", (e) => {
                 state.homeState = e.target.value;
+                state.homeDistrict = "all";
+                renderHome();
+            });
+            $("homeDistrictChips").addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-home-district]");
+                if (!btn) return;
+                state.homeDistrict = btn.getAttribute("data-home-district");
                 renderHome();
             });
             $("btnHomeReset").addEventListener("click", () => {
                 state.homeCat = "all";
                 state.homeState = "all";
+                state.homeDistrict = "all";
                 renderHome();
             });
 
@@ -3894,6 +4054,7 @@
                 else if (act === "reset-home") {
                     state.homeCat = "all";
                     state.homeState = "all";
+                    state.homeDistrict = "all";
                     renderHome();
                 } else if (act === "reset-exp") {
                     state.expSearch = ""; state.expCat = "all"; state.expState = "all"; state.expPlat = "all";
@@ -3933,7 +4094,17 @@
                 $("fieldCategory").value = btn.getAttribute("data-pick-cat");
                 renderModalCatSelector();
             });
-            $("fieldState").addEventListener("change", () => { state.userEditedState = true; });
+            $("fieldState").addEventListener("change", (e) => {
+                state.userEditedState = true;
+                populateDistrictDatalist(e.target.value);
+            });
+            $("fieldDistrict").addEventListener("input", () => { state.userEditedDistrict = true; });
+            $("fieldTitle").addEventListener("input", (e) => {
+                if (!state.userEditedDistrict && !$("fieldDistrict").value.trim()) {
+                    const guessed = guessDistrict(e.target.value, $("fieldState").value);
+                    if (guessed) $("fieldDistrict").value = guessed;
+                }
+            });
 
             $("placeForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -3948,6 +4119,7 @@
                     url: safeUrl,
                     category: mapCategory($("fieldCategory").value),
                     state: $("fieldState").value,
+                    district: $("fieldDistrict").value.trim(),
                     notes: $("fieldNotes").value.trim(),
                     platform: detectPlatform(safeUrl).id
                 };
@@ -4053,6 +4225,8 @@
                 const el = e.target;
                 if (el.hasAttribute("data-wa-title")) {
                     state.waParsed[Number(el.getAttribute("data-wa-title"))].title = el.value;
+                } else if (el.hasAttribute("data-wa-district")) {
+                    state.waParsed[Number(el.getAttribute("data-wa-district"))].district = el.value;
                 }
             });
             $("btnCommitWa").addEventListener("click", commitWaImport);
@@ -4066,9 +4240,6 @@
             });
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape") ["placeSheet", "waSheet", "deleteSheet", "navSheet"].forEach(closeSheet);
-            });
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") ["placeSheet", "waSheet", "deleteSheet"].forEach(closeSheet);
             });
 
             // Re-sync when tab returns to focus or reconnects
