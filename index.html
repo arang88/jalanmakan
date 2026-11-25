@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#f8fafc" id="metaThemeColor">
+    <meta name="theme-color" content="#f2f4f7" id="metaThemeColor">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Port Makan & Jalan</title>
     <style>
         /* =====================================================================
-           1. DESIGN TOKENS — LIGHT MODE DEFAULT + DARK MODE THEME
+           1. DESIGN TOKENS — BENTO GRID MODEN (LIGHT & DARK MODE)
            100% self-contained CSS (zero external CDN required)
            ===================================================================== */
         :root {
-            --bg-page: #f4f6f9;
+            --bg-page: #f2f4f7;
+            --bg-dot: rgba(15, 23, 42, 0.045);
             --bg-surface: #ffffff;
             --bg-card: #ffffff;
             --bg-subtle: #f1f5f9;
+            --bg-memo: #f8fafc;
             --bg-input: #f8fafc;
-            --bg-nav: rgba(255, 255, 255, 0.94);
+            --bg-nav: rgba(255, 255, 255, 0.86);
+            --bg-header: rgba(242, 244, 247, 0.84);
 
             --text-primary: #0f172a;
             --text-secondary: #475569;
@@ -27,23 +30,38 @@
             --border: #e2e8f0;
             --border-strong: #cbd5e1;
 
-            --teal: #0d9488;
-            --teal-hover: #0f766e;
-            --teal-soft: #f0fdfa;
-            --teal-border: #99f6e4;
-            --teal-text: #0f766e;
+            /* Brand Accent: Modern Electric Indigo */
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --accent-soft: #eef2ff;
+            --accent-border: #c7d2fe;
+            --accent-text: #4338ca;
 
-            --orange: #ea580c;
-            --orange-soft: #fff7ed;
-            --orange-border: #fed7aa;
-            --orange-text: #c2410c;
+            /* Primary CTA Button */
+            --ink-btn: #0f172a;
+            --ink-btn-hover: #1e293b;
+            --ink-btn-text: #ffffff;
 
-            --indigo: #4f46e5;
-            --indigo-soft: #eef2ff;
-            --indigo-border: #c7d2fe;
-            --indigo-text: #4338ca;
+            /* Category 1: Makan (Vibrant Tangerine) */
+            --cat-makan: #f97316;
+            --cat-makan-soft: #fff7ed;
+            --cat-makan-border: #fed7aa;
+            --cat-makan-text: #c2410c;
 
-            --emerald: #059669;
+            /* Category 2: Tempat (Fresh Emerald Teal) */
+            --cat-tempat: #0d9488;
+            --cat-tempat-soft: #f0fdfa;
+            --cat-tempat-border: #99f6e4;
+            --cat-tempat-text: #0f766e;
+
+            /* Category 3: Aktiviti (Vivid Violet) */
+            --cat-aktiviti: #7c3aed;
+            --cat-aktiviti-soft: #f5f3ff;
+            --cat-aktiviti-border: #ddd6fe;
+            --cat-aktiviti-text: #6d28d9;
+
+            /* Semantic Statuses */
+            --emerald: #10b981;
             --emerald-soft: #ecfdf5;
             --emerald-border: #a7f3d0;
             --emerald-text: #047857;
@@ -68,85 +86,97 @@
             --maps-border: #bfdbfe;
             --maps-text: #1d4ed8;
 
-            --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.05);
-            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
-            --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.1);
-            --shadow-lg: 0 18px 40px -8px rgba(15, 23, 42, 0.2);
+            --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+            --shadow-bento: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 20px -6px rgba(15, 23, 42, 0.06);
+            --shadow-bento-hover: 0 12px 30px -8px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+            --shadow-dock: 0 14px 36px -8px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 24px 54px -12px rgba(15, 23, 42, 0.28);
 
-            --r-sm: 8px;
-            --r-md: 12px;
-            --r-lg: 16px;
-            --r-xl: 22px;
+            --r-sm: 10px;
+            --r-md: 14px;
+            --r-bento: 22px;
 
-            --nav-h: 66px;
-            --header-h: 58px;
-            --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --header-h: 62px;
+            --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         html[data-theme="dark"] {
-            --bg-page: #0b1120;
-            --bg-surface: #111827;
-            --bg-card: #162032;
-            --bg-subtle: #1e293b;
-            --bg-input: #0f172a;
-            --bg-nav: rgba(17, 24, 39, 0.94);
+            --bg-page: #090a0d;
+            --bg-dot: rgba(255, 255, 255, 0.04);
+            --bg-surface: #111318;
+            --bg-card: #14171f;
+            --bg-subtle: #1e222d;
+            --bg-memo: #191d27;
+            --bg-input: #0e1015;
+            --bg-nav: rgba(20, 23, 31, 0.86);
+            --bg-header: rgba(9, 10, 13, 0.84);
 
-            --text-primary: #f1f5f9;
+            --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
 
-            --border: #253349;
-            --border-strong: #334155;
+            --border: #232836;
+            --border-strong: #333b4f;
 
-            --teal: #14b8a6;
-            --teal-hover: #2dd4bf;
-            --teal-soft: rgba(20, 184, 166, 0.14);
-            --teal-border: rgba(45, 212, 191, 0.32);
-            --teal-text: #5eead4;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-soft: rgba(99, 102, 241, 0.16);
+            --accent-border: rgba(129, 140, 248, 0.34);
+            --accent-text: #a5b4fc;
 
-            --orange: #fb923c;
-            --orange-soft: rgba(251, 146, 60, 0.14);
-            --orange-border: rgba(251, 146, 60, 0.32);
-            --orange-text: #fdba74;
+            --ink-btn: #f8fafc;
+            --ink-btn-hover: #ffffff;
+            --ink-btn-text: #0f172a;
 
-            --indigo: #818cf8;
-            --indigo-soft: rgba(129, 140, 248, 0.15);
-            --indigo-border: rgba(129, 140, 248, 0.32);
-            --indigo-text: #a5b4fc;
+            --cat-makan: #fb923c;
+            --cat-makan-soft: rgba(249, 115, 22, 0.16);
+            --cat-makan-border: rgba(251, 146, 60, 0.34);
+            --cat-makan-text: #fdba74;
 
-            --emerald: #10b981;
-            --emerald-soft: rgba(16, 185, 129, 0.14);
-            --emerald-border: rgba(52, 211, 153, 0.32);
+            --cat-tempat: #2dd4bf;
+            --cat-tempat-soft: rgba(20, 184, 166, 0.15);
+            --cat-tempat-border: rgba(45, 212, 191, 0.34);
+            --cat-tempat-text: #5eead4;
+
+            --cat-aktiviti: #a78bfa;
+            --cat-aktiviti-soft: rgba(139, 92, 246, 0.16);
+            --cat-aktiviti-border: rgba(167, 139, 250, 0.34);
+            --cat-aktiviti-text: #c4b5fd;
+
+            --emerald: #34d399;
+            --emerald-soft: rgba(16, 185, 129, 0.16);
+            --emerald-border: rgba(52, 211, 153, 0.34);
             --emerald-text: #6ee7b7;
 
-            --amber: #f59e0b;
-            --amber-soft: rgba(245, 158, 11, 0.14);
-            --amber-border: rgba(251, 191, 36, 0.32);
+            --amber: #fbbf24;
+            --amber-soft: rgba(245, 158, 11, 0.16);
+            --amber-border: rgba(251, 191, 36, 0.34);
             --amber-text: #fcd34d;
 
-            --rose: #f43f5e;
-            --rose-soft: rgba(244, 63, 94, 0.15);
+            --rose: #fb7185;
+            --rose-soft: rgba(244, 63, 94, 0.16);
             --rose-border: rgba(251, 113, 133, 0.34);
             --rose-text: #fda4af;
 
             --wa-green: #22c55e;
-            --wa-soft: rgba(34, 197, 94, 0.14);
+            --wa-soft: rgba(34, 197, 94, 0.15);
             --wa-border: rgba(74, 222, 128, 0.32);
             --wa-text: #86efac;
 
             --maps-blue: #60a5fa;
-            --maps-soft: rgba(59, 130, 246, 0.15);
+            --maps-soft: rgba(59, 130, 246, 0.16);
             --maps-border: rgba(96, 165, 250, 0.34);
             --maps-text: #93c5fd;
 
-            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.25);
-            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.28);
-            --shadow-md: 0 10px 26px -4px rgba(0, 0, 0, 0.45);
-            --shadow-lg: 0 20px 44px -8px rgba(0, 0, 0, 0.65);
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.32);
+            --shadow-bento: 0 2px 10px rgba(0, 0, 0, 0.28);
+            --shadow-bento-hover: 0 14px 34px -8px rgba(0, 0, 0, 0.56);
+            --shadow-dock: 0 18px 42px -8px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(255, 255, 255, 0.06);
+            --shadow-lg: 0 28px 56px -12px rgba(0, 0, 0, 0.78);
         }
 
         /* =====================================================================
-           2. RESET & BASE LAYOUT
+           2. RESET & SUBTLE DOT-MATRIX BENTO CANVAS
            ===================================================================== */
         *, *::before, *::after {
             box-sizing: border-box;
@@ -160,6 +190,8 @@
             min-height: 100%;
             font-family: var(--font-sans);
             background-color: var(--bg-page);
+            background-image: radial-gradient(var(--bg-dot) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--text-primary);
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
@@ -186,8 +218,8 @@
             display: none !important;
         }
 
-        @keyframes viewIn {
-            from { opacity: 0; transform: translateY(6px); }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -196,28 +228,28 @@
         }
 
         .spin-anim {
-            animation: spin 0.9s linear infinite;
+            animation: spin 0.85s linear infinite;
         }
 
         /* =====================================================================
-           3. TOP APP BAR (STICKY)
+           3. MODERN GLASS TOP HEADER
            ===================================================================== */
         .app-header {
             position: sticky;
             top: 0;
             z-index: 40;
             height: var(--header-h);
-            background: var(--bg-nav);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: var(--bg-header);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--border);
         }
 
         .header-inner {
-            max-width: 720px;
+            max-width: 920px;
             height: 100%;
             margin: 0 auto;
-            padding: 0 14px;
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -227,21 +259,21 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 10px;
             min-width: 0;
         }
 
         .brand-mark {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--teal), #0284c7);
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #0ea5e9);
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.42);
+            box-shadow: 0 6px 16px -4px rgba(79, 70, 229, 0.45);
         }
 
         .brand-text {
@@ -251,9 +283,9 @@
         }
 
         .brand-title {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.025em;
             line-height: 1.15;
             white-space: nowrap;
             overflow: hidden;
@@ -261,12 +293,13 @@
         }
 
         .brand-sub {
-            font-size: 0.69rem;
+            font-size: 0.68rem;
             font-weight: 600;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-top: 1px;
         }
 
         .header-actions {
@@ -281,13 +314,14 @@
             align-items: center;
             gap: 5px;
             height: 30px;
-            padding: 0 9px;
-            border-radius: 999px;
+            padding: 0 10px;
+            border-radius: 10px;
             font-size: 0.7rem;
             font-weight: 700;
             border: 1px solid var(--border);
-            background: var(--bg-subtle);
+            background: var(--bg-card);
             color: var(--text-secondary);
+            box-shadow: var(--shadow-xs);
             transition: all 0.16s ease;
         }
         .sync-pill:active { transform: scale(0.95); }
@@ -320,16 +354,16 @@
             align-items: center;
             padding: 2px;
             height: 30px;
-            border-radius: 999px;
+            border-radius: 10px;
             background: var(--bg-subtle);
             border: 1px solid var(--border);
         }
 
         .lang-btn {
             height: 24px;
-            padding: 0 7px;
-            border-radius: 999px;
-            font-size: 0.68rem;
+            padding: 0 8px;
+            border-radius: 8px;
+            font-size: 0.67rem;
             font-weight: 800;
             color: var(--text-muted);
             transition: all 0.15s ease;
@@ -343,43 +377,84 @@
         .icon-btn {
             width: 32px;
             height: 32px;
-            border-radius: 999px;
-            background: var(--bg-subtle);
+            border-radius: 10px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
             color: var(--text-secondary);
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            box-shadow: var(--shadow-xs);
             transition: all 0.15s ease;
         }
         .icon-btn:hover { color: var(--text-primary); border-color: var(--border-strong); }
-        .icon-btn:active { transform: scale(0.93); }
+        .icon-btn:active { transform: scale(0.92); }
 
         /* =====================================================================
-           4. MAIN CONTAINER & TAB VIEWS
+           4. MAIN CONTAINER & VIEWS
            ===================================================================== */
         .app-main {
-            max-width: 720px;
+            max-width: 920px;
             margin: 0 auto;
-            padding: 14px 14px calc(var(--nav-h) + 28px + env(safe-area-inset-bottom, 0px));
+            padding: 16px 14px calc(108px + env(safe-area-inset-bottom, 0px));
         }
 
         .view-pane {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            animation: viewIn 0.18s ease-out;
+            gap: 14px;
+            animation: fadeSlideUp 0.2s ease-out;
         }
 
         /* =====================================================================
-           5. CHIPS, FILTER ROWS & NEARBY PANEL
+           5. BENTO CONTROL TILES (CATEGORIES + LOCATION / NEARBY)
            ===================================================================== */
+        .bento-controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media (min-width: 720px) {
+            .bento-controls {
+                grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+                align-items: stretch;
+            }
+        }
+
+        .bento-tile {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-bento);
+            padding: 11px 12px;
+            box-shadow: var(--shadow-bento);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 9px;
+        }
+
+        .bento-sub-strip {
+            grid-column: 1 / -1;
+        }
+
+        .filter-dock {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-bento);
+            padding: 12px;
+            box-shadow: var(--shadow-bento);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         .chip-scroll {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
             overflow-x: auto;
-            padding-bottom: 2px;
+            padding-bottom: 1px;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -392,53 +467,57 @@
             gap: 6px;
             height: 36px;
             padding: 0 13px;
-            border-radius: 999px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-subtle);
+            border: 1px solid transparent;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.79rem;
             font-weight: 700;
-            box-shadow: var(--shadow-xs);
-            transition: all 0.15s ease;
+            transition: all 0.16s ease;
         }
+        .chip:hover { color: var(--text-primary); border-color: var(--border-strong); }
         .chip:active { transform: scale(0.95); }
+
         .chip-sm {
             height: 30px;
             padding: 0 11px;
-            font-size: 0.74rem;
+            border-radius: 10px;
+            font-size: 0.73rem;
+            background: var(--bg-card);
+            border-color: var(--border);
         }
 
         .chip.active-all {
-            background: var(--text-primary);
-            border-color: var(--text-primary);
-            color: var(--bg-card);
+            background: var(--ink-btn);
+            color: var(--ink-btn-text);
+            box-shadow: var(--shadow-xs);
         }
         .chip.active-makan {
-            background: var(--orange);
-            border-color: var(--orange);
+            background: var(--cat-makan);
             color: #ffffff;
+            box-shadow: 0 5px 14px -4px rgba(249, 115, 22, 0.5);
         }
         .chip.active-tempat {
-            background: var(--teal);
-            border-color: var(--teal);
+            background: var(--cat-tempat);
             color: #ffffff;
+            box-shadow: 0 5px 14px -4px rgba(13, 148, 136, 0.45);
         }
         .chip.active-aktiviti {
-            background: var(--indigo);
-            border-color: var(--indigo);
+            background: var(--cat-aktiviti);
             color: #ffffff;
+            box-shadow: 0 5px 14px -4px rgba(124, 58, 237, 0.48);
         }
         .chip.active-teal {
-            background: var(--teal);
-            border-color: var(--teal);
+            background: var(--accent);
+            border-color: var(--accent);
             color: #ffffff;
         }
 
-        /* Row 2 on Home: State Dropdown + Nearby Button + Reset */
+        /* Location Filter Row inside Bento Tile */
         .home-filter-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .home-state-wrap {
@@ -452,7 +531,7 @@
             left: 11px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--teal);
+            color: var(--accent);
             pointer-events: none;
             display: flex;
             align-items: center;
@@ -461,20 +540,19 @@
         .home-state-select {
             width: 100%;
             height: 38px;
-            padding: 0 32px 0 33px;
-            border-radius: var(--r-md);
-            background: var(--bg-card);
+            padding: 0 30px 0 32px;
+            border-radius: 12px;
+            background: var(--bg-input);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            font-size: 0.82rem;
+            font-size: 0.81rem;
             font-weight: 700;
             appearance: none;
             -webkit-appearance: none;
-            box-shadow: var(--shadow-xs);
             outline: none;
-            transition: border-color 0.15s ease;
+            transition: border-color 0.15s ease, background 0.15s ease;
         }
-        .home-state-select:focus { border-color: var(--teal); }
+        .home-state-select:focus { border-color: var(--accent); background: var(--bg-card); }
 
         .home-state-chevron {
             position: absolute;
@@ -493,23 +571,22 @@
             align-items: center;
             gap: 6px;
             height: 38px;
-            padding: 0 12px;
-            border-radius: var(--r-md);
-            background: var(--bg-card);
+            padding: 0 13px;
+            border-radius: 12px;
+            background: var(--bg-input);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            font-size: 0.79rem;
+            font-size: 0.78rem;
             font-weight: 700;
-            box-shadow: var(--shadow-xs);
             transition: all 0.16s ease;
         }
-        .home-nearby-btn:hover { border-color: var(--teal-border); color: var(--teal-text); }
+        .home-nearby-btn:hover { border-color: var(--cat-tempat-border); color: var(--cat-tempat-text); }
         .home-nearby-btn:active { transform: scale(0.95); }
         .home-nearby-btn.is-active {
-            background: var(--teal);
-            border-color: var(--teal);
+            background: var(--cat-tempat);
+            border-color: var(--cat-tempat);
             color: #ffffff;
-            box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.38);
+            box-shadow: 0 5px 14px -3px rgba(13, 148, 136, 0.45);
         }
 
         .home-reset-chip {
@@ -518,27 +595,27 @@
             align-items: center;
             gap: 4px;
             height: 38px;
-            padding: 0 10px;
-            border-radius: var(--r-md);
+            padding: 0 11px;
+            border-radius: 12px;
             background: var(--rose-soft);
             border: 1px solid var(--rose-border);
             color: var(--rose-text);
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             font-weight: 700;
             transition: transform 0.15s ease;
         }
         .home-reset-chip:active { transform: scale(0.95); }
 
-        /* Nearby Active Panel */
+        /* Nearby Active Bento Banner */
         .nearby-banner {
-            background: var(--teal-soft);
-            border: 1px solid var(--teal-border);
-            border-radius: var(--r-lg);
-            padding: 11px 12px;
+            background: var(--cat-tempat-soft);
+            border: 1px solid var(--cat-tempat-border);
+            border-radius: var(--r-bento);
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
             gap: 9px;
-            animation: viewIn 0.18s ease-out;
+            animation: fadeSlideUp 0.18s ease-out;
         }
 
         .nearby-head {
@@ -553,9 +630,9 @@
             align-items: center;
             gap: 7px;
             min-width: 0;
-            font-size: 0.8rem;
+            font-size: 0.81rem;
             font-weight: 800;
-            color: var(--teal-text);
+            color: var(--cat-tempat-text);
         }
 
         .nearby-loc-text {
@@ -573,11 +650,11 @@
 
         .nearby-mini-btn {
             height: 28px;
-            padding: 0 9px;
-            border-radius: 999px;
+            padding: 0 10px;
+            border-radius: 9px;
             background: var(--bg-card);
-            border: 1px solid var(--teal-border);
-            color: var(--teal-text);
+            border: 1px solid var(--cat-tempat-border);
+            color: var(--cat-tempat-text);
             font-size: 0.71rem;
             font-weight: 700;
             display: inline-flex;
@@ -595,7 +672,7 @@
             flex-direction: column;
             gap: 6px;
             padding-top: 8px;
-            border-top: 1px dashed var(--teal-border);
+            border-top: 1px solid var(--cat-tempat-border);
         }
 
         .nearby-warn-txt {
@@ -606,83 +683,129 @@
         }
 
         /* =====================================================================
-           6. COMPACT, SCANNABLE VERTICAL FEED CARDS (NO THUMBNAILS, NO DATES, NO URL PREVIEW)
+           6. MODERN BENTO GRID CARDS (2-COL ON TABLET/DESKTOP, 1-COL ON MOBILE)
            ===================================================================== */
         .cards-feed {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .cards-feed {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
         }
 
         .place-card {
+            position: relative;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--r-lg);
-            padding: 14px;
-            box-shadow: var(--shadow-xs);
+            border-radius: var(--r-bento);
+            padding: 16px;
+            box-shadow: var(--shadow-bento);
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            transition: border-color 0.16s ease, box-shadow 0.16s ease;
-        }
-        .place-card:hover {
-            border-color: var(--border-strong);
-            box-shadow: var(--shadow-sm);
+            gap: 12px;
+            overflow: hidden;
+            transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s ease, border-color 0.18s ease;
         }
 
-        .card-badges {
+        .place-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-bento-hover);
+        }
+
+        /* Bento Card Header: Squircle Category Icon + Meta + Platform Pill */
+        .bento-card-head {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
+            justify-content: space-between;
+            gap: 10px;
         }
 
-        .cat-pill {
-            display: inline-flex;
+        .bento-cat-group {
+            display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 3px 9px;
-            border-radius: 999px;
-            font-size: 0.71rem;
-            font-weight: 800;
+            gap: 9px;
+            min-width: 0;
+        }
+
+        .bento-cat-ico {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
             border: 1px solid transparent;
         }
-        .cat-makan {
-            background: var(--orange-soft);
-            border-color: var(--orange-border);
-            color: var(--orange-text);
+        .bento-cat-ico svg {
+            width: 17px;
+            height: 17px;
         }
-        .cat-tempat {
-            background: var(--teal-soft);
-            border-color: var(--teal-border);
-            color: var(--teal-text);
+        .bento-cat-ico.cat-makan {
+            background: var(--cat-makan-soft);
+            border-color: var(--cat-makan-border);
+            color: var(--cat-makan-text);
         }
-        .cat-aktiviti {
-            background: var(--indigo-soft);
-            border-color: var(--indigo-border);
-            color: var(--indigo-text);
+        .bento-cat-ico.cat-tempat {
+            background: var(--cat-tempat-soft);
+            border-color: var(--cat-tempat-border);
+            color: var(--cat-tempat-text);
+        }
+        .bento-cat-ico.cat-aktiviti {
+            background: var(--cat-aktiviti-soft);
+            border-color: var(--cat-aktiviti-border);
+            color: var(--cat-aktiviti-text);
         }
 
-        .state-pill {
+        .bento-cat-meta {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            gap: 1px;
+        }
+
+        .bento-cat-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .bento-cat-label.cat-makan { color: var(--cat-makan-text); }
+        .bento-cat-label.cat-tempat { color: var(--cat-tempat-text); }
+        .bento-cat-label.cat-aktiviti { color: var(--cat-aktiviti-text); }
+
+        .bento-loc-line {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 3px 9px;
-            border-radius: 999px;
-            font-size: 0.71rem;
-            font-weight: 700;
-            background: var(--bg-subtle);
-            border: 1px solid var(--border);
+            font-size: 0.76rem;
+            font-weight: 600;
             color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bento-head-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
         }
 
         .dist-pill {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 3px 9px;
-            border-radius: 999px;
-            font-size: 0.71rem;
+            padding: 4px 8px;
+            border-radius: 9px;
+            font-size: 0.7rem;
             font-weight: 800;
             background: var(--emerald-soft);
             border: 1px solid var(--emerald-border);
@@ -693,23 +816,22 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            padding: 3px 8px;
-            border-radius: 999px;
-            font-size: 0.69rem;
-            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 9px;
             background: var(--bg-subtle);
+            font-size: 0.68rem;
+            font-weight: 700;
             color: var(--text-muted);
-            margin-left: auto;
         }
 
         .plat-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             flex-shrink: 0;
         }
         .dot-fb { background: #1877f2; }
-        .dot-tt { background: #111827; }
+        .dot-tt { background: #0f172a; }
         html[data-theme="dark"] .dot-tt { background: #f8fafc; }
         .dot-ig { background: #e1306c; }
         .dot-maps { background: #16a34a; }
@@ -719,37 +841,40 @@
         .card-main {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
+            flex: 1;
         }
 
         .card-title {
-            font-size: 0.98rem;
+            font-size: 1.04rem;
             font-weight: 800;
-            line-height: 1.35;
+            line-height: 1.32;
             color: var(--text-primary);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
             word-break: break-word;
+            transition: color 0.15s ease;
         }
-        .card-title:hover { color: var(--teal); }
+        .card-title:hover { color: var(--accent); }
 
         .card-note {
             margin: 0;
-            font-size: 0.82rem;
-            line-height: 1.48;
+            font-size: 0.81rem;
+            line-height: 1.5;
             color: var(--text-secondary);
-            background: var(--bg-subtle);
-            padding: 8px 10px;
-            border-radius: var(--r-sm);
-            border-left: 3px solid var(--teal);
+            background: var(--bg-memo);
+            padding: 9px 11px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
             word-break: break-word;
         }
 
         .card-footer {
+            margin-top: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            padding-top: 8px;
+            padding-top: 11px;
             border-top: 1px solid var(--border);
             flex-wrap: wrap;
         }
@@ -764,18 +889,18 @@
         .open-link-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             height: 34px;
             padding: 0 13px;
-            border-radius: var(--r-sm);
-            background: var(--teal);
-            color: #ffffff;
-            font-size: 0.78rem;
+            border-radius: 11px;
+            background: var(--ink-btn);
+            color: var(--ink-btn-text);
+            font-size: 0.76rem;
             font-weight: 700;
             transition: background 0.15s ease, transform 0.14s ease;
         }
-        .open-link-btn:hover { background: var(--teal-hover); }
-        .open-link-btn:active { transform: scale(0.96); }
+        .open-link-btn:hover { background: var(--ink-btn-hover); }
+        .open-link-btn:active { transform: scale(0.95); }
 
         .maps-chip-btn {
             display: inline-flex;
@@ -783,11 +908,11 @@
             gap: 5px;
             height: 34px;
             padding: 0 11px;
-            border-radius: var(--r-sm);
+            border-radius: 11px;
             background: var(--maps-soft);
             border: 1px solid var(--maps-border);
             color: var(--maps-text);
-            font-size: 0.76rem;
+            font-size: 0.75rem;
             font-weight: 700;
             transition: transform 0.14s ease;
         }
@@ -803,9 +928,9 @@
         .card-act-btn {
             width: 34px;
             height: 34px;
-            border-radius: var(--r-sm);
+            border-radius: 10px;
             background: var(--bg-subtle);
-            border: 1px solid var(--border);
+            border: 1px solid transparent;
             color: var(--text-secondary);
             display: inline-flex;
             align-items: center;
@@ -813,7 +938,7 @@
             transition: all 0.15s ease;
         }
         .card-act-btn:hover { color: var(--text-primary); border-color: var(--border-strong); }
-        .card-act-btn:active { transform: scale(0.93); }
+        .card-act-btn:active { transform: scale(0.92); }
         .card-act-btn.wa {
             background: var(--wa-soft);
             border-color: var(--wa-border);
@@ -826,13 +951,13 @@
         }
 
         /* =====================================================================
-           7. EMPTY STATES, SEARCH TAB, SPIN TAB & SETTINGS TAB
+           7. EMPTY STATES, SEARCH TAB, BENTO SPIN & SETTINGS DASHBOARD
            ===================================================================== */
         .empty-box {
             background: var(--bg-card);
-            border: 1px dashed var(--border-strong);
-            border-radius: var(--r-xl);
-            padding: 34px 20px;
+            border: 1.5px dashed var(--border-strong);
+            border-radius: var(--r-bento);
+            padding: 40px 22px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -841,27 +966,28 @@
         }
 
         .empty-icon {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             border-radius: 16px;
-            background: var(--teal-soft);
-            color: var(--teal-text);
+            background: var(--accent-soft);
+            color: var(--accent-text);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .empty-title {
-            font-size: 0.98rem;
+            font-size: 1.05rem;
             font-weight: 800;
+            letter-spacing: -0.02em;
             color: var(--text-primary);
         }
 
         .empty-desc {
             margin: 0;
-            max-width: 320px;
+            max-width: 340px;
             font-size: 0.82rem;
-            line-height: 1.5;
+            line-height: 1.52;
             color: var(--text-muted);
         }
 
@@ -871,25 +997,38 @@
             justify-content: center;
             gap: 8px;
             flex-wrap: wrap;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
-        /* Panel / Box */
+        .bento-settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            align-items: start;
+        }
+
+        @media (min-width: 740px) {
+            .bento-settings-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
         .panel-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--r-lg);
-            padding: 15px;
-            box-shadow: var(--shadow-xs);
+            border-radius: var(--r-bento);
+            padding: 18px;
+            box-shadow: var(--shadow-bento);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 13px;
         }
 
         .panel-title {
             margin: 0;
-            font-size: 0.92rem;
+            font-size: 1.04rem;
             font-weight: 800;
+            letter-spacing: -0.02em;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -897,9 +1036,9 @@
 
         .panel-sub {
             margin: 0;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            line-height: 1.45;
+            line-height: 1.48;
         }
 
         /* Search Bar */
@@ -909,37 +1048,37 @@
 
         .search-icon {
             position: absolute;
-            left: 13px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
+            color: var(--accent);
             pointer-events: none;
             display: flex;
         }
 
         .search-input {
             width: 100%;
-            height: 44px;
-            padding: 0 38px 0 40px;
-            border-radius: var(--r-md);
+            height: 46px;
+            padding: 0 40px 0 42px;
+            border-radius: 16px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             font-size: 0.88rem;
             font-weight: 600;
             outline: none;
-            box-shadow: var(--shadow-xs);
+            box-shadow: var(--shadow-bento);
             transition: border-color 0.15s ease;
         }
-        .search-input:focus { border-color: var(--teal); }
+        .search-input:focus { border-color: var(--accent); }
 
         .search-clear {
             position: absolute;
-            right: 8px;
+            right: 9px;
             top: 50%;
             transform: translateY(-50%);
             width: 28px;
             height: 28px;
-            border-radius: 50%;
+            border-radius: 9px;
             background: var(--bg-subtle);
             color: var(--text-muted);
             display: flex;
@@ -961,44 +1100,46 @@
             font-size: 0.78rem;
             font-weight: 700;
             color: var(--text-muted);
-            padding: 0 2px;
+            padding: 0 4px;
         }
 
-        /* Spin / Roulette Stage */
+        /* Bento Spin Showcase */
         .spin-stage {
-            background: linear-gradient(145deg, var(--teal-soft), var(--bg-card));
-            border: 1px solid var(--teal-border);
-            border-radius: var(--r-xl);
-            padding: 20px 16px;
+            background: linear-gradient(145deg, var(--accent-soft), var(--bg-subtle));
+            border: 1px solid var(--accent-border);
+            border-radius: 18px;
+            padding: 18px 16px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .spin-reel {
             width: 100%;
-            min-height: 76px;
-            padding: 14px 16px;
-            border-radius: var(--r-lg);
+            min-height: 90px;
+            padding: 16px 18px;
+            border-radius: 16px;
             background: var(--bg-card);
-            border: 2px dashed var(--teal-border);
+            border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            transition: transform 0.12s ease;
+            gap: 5px;
+            box-shadow: var(--shadow-bento);
+            transition: transform 0.12s ease, border-color 0.15s ease;
         }
         .spin-reel.rolling {
-            border-style: solid;
-            border-color: var(--teal);
+            border-color: var(--accent);
+            transform: scale(0.99);
         }
 
         .spin-reel-title {
-            font-size: 1.05rem;
+            font-size: 1.14rem;
             font-weight: 800;
+            letter-spacing: -0.02em;
             color: var(--text-primary);
             line-height: 1.3;
         }
@@ -1006,38 +1147,39 @@
         .spin-reel-sub {
             font-size: 0.76rem;
             font-weight: 700;
-            color: var(--teal-text);
+            color: var(--accent-text);
         }
 
-        /* Buttons */
+        /* Modern Bento Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 7px;
-            height: 40px;
-            padding: 0 16px;
-            border-radius: var(--r-md);
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 13px;
             font-size: 0.84rem;
             font-weight: 700;
             transition: all 0.15s ease;
         }
-        .btn:active { transform: scale(0.97); }
-        .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+        .btn:active { transform: scale(0.96); }
+        .btn:disabled { opacity: 0.52; cursor: not-allowed; }
         .btn-full { width: 100%; }
 
         .btn-teal {
-            background: var(--teal);
+            background: var(--accent);
             color: #ffffff;
-            box-shadow: 0 4px 14px -3px rgba(13, 148, 136, 0.45);
+            box-shadow: 0 6px 16px -4px rgba(79, 70, 229, 0.45);
         }
-        .btn-teal:hover { background: var(--teal-hover); }
+        .btn-teal:hover { background: var(--accent-hover); }
 
         .btn-soft {
             background: var(--bg-subtle);
             border: 1px solid var(--border);
             color: var(--text-primary);
         }
+        .btn-soft:hover { border-color: var(--border-strong); }
 
         .btn-danger {
             background: var(--rose);
@@ -1050,22 +1192,17 @@
         }
 
         .btn-waze {
-            background: #0ea5e9;
-            color: #ffffff;
-        }
-
-        .btn-wa {
-            background: var(--wa-green);
+            background: #0284c7;
             color: #ffffff;
         }
 
         .mini-chip {
-            height: 26px;
-            padding: 0 9px;
-            border-radius: 999px;
-            background: var(--teal-soft);
-            border: 1px solid var(--teal-border);
-            color: var(--teal-text);
+            height: 27px;
+            padding: 0 10px;
+            border-radius: 9px;
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-border);
+            color: var(--accent-text);
             font-size: 0.71rem;
             font-weight: 700;
             display: inline-flex;
@@ -1096,37 +1233,38 @@
         }
 
         .field-lbl {
-            font-size: 0.77rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: var(--text-secondary);
         }
 
         .input-field, .select-field, .textarea-field {
             width: 100%;
-            padding: 10px 12px;
-            border-radius: var(--r-md);
+            padding: 10px 13px;
+            border-radius: 12px;
             background: var(--bg-input);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            font-size: 0.86rem;
+            font-size: 0.85rem;
             font-weight: 600;
             outline: none;
-            transition: border-color 0.15s ease;
+            transition: border-color 0.15s ease, background 0.15s ease;
         }
         .input-field:focus, .select-field:focus, .textarea-field:focus {
-            border-color: var(--teal);
+            border-color: var(--accent);
+            background: var(--bg-card);
         }
 
         .textarea-field {
-            min-height: 76px;
+            min-height: 78px;
             resize: vertical;
-            line-height: 1.45;
+            line-height: 1.48;
         }
 
         .helper {
             font-size: 0.72rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.42;
         }
 
         .grid-2 {
@@ -1142,7 +1280,7 @@
             flex-wrap: wrap;
         }
 
-        /* 3 Category Segmented Picker in Add/Edit Form */
+        /* 3 Category Segmented Bento Picker in Add/Edit Form */
         .cat-seg-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1155,8 +1293,8 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
-            padding: 10px 6px;
-            border-radius: var(--r-md);
+            padding: 11px 6px;
+            border-radius: 14px;
             background: var(--bg-input);
             border: 1.5px solid var(--border);
             color: var(--text-secondary);
@@ -1164,24 +1302,23 @@
             font-weight: 800;
             transition: all 0.15s ease;
         }
-        .cat-seg-btn:active { transform: scale(0.96); }
+        .cat-seg-btn:active { transform: scale(0.95); }
         .cat-seg-btn.active-makan {
-            background: var(--orange-soft);
-            border-color: var(--orange);
-            color: var(--orange-text);
+            background: var(--cat-makan-soft);
+            border-color: var(--cat-makan);
+            color: var(--cat-makan-text);
         }
         .cat-seg-btn.active-tempat {
-            background: var(--teal-soft);
-            border-color: var(--teal);
-            color: var(--teal-text);
+            background: var(--cat-tempat-soft);
+            border-color: var(--cat-tempat);
+            color: var(--cat-tempat-text);
         }
         .cat-seg-btn.active-aktiviti {
-            background: var(--indigo-soft);
-            border-color: var(--indigo);
-            color: var(--indigo-text);
+            background: var(--cat-aktiviti-soft);
+            border-color: var(--cat-aktiviti);
+            color: var(--cat-aktiviti-text);
         }
 
-        /* Settings Action Rows */
         .settings-action-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1191,58 +1328,60 @@
         .code-block {
             background: var(--bg-input);
             border: 1px solid var(--border);
-            border-radius: var(--r-md);
-            padding: 10px 12px;
+            border-radius: 12px;
+            padding: 11px 13px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 0.75rem;
-            line-height: 1.45;
+            line-height: 1.48;
             overflow-x: auto;
             color: var(--text-secondary);
             margin: 0;
         }
 
         /* =====================================================================
-           8. BOTTOM NAVIGATION BAR (MOBILE-FIRST + DESKTOP FLOATING PILL)
+           8. FLOATING GLASS BENTO DOCK NAVIGATION
            ===================================================================== */
         .bottom-nav {
             position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            left: 50%;
+            bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+            transform: translateX(-50%);
             z-index: 45;
-            height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
-            padding-bottom: env(safe-area-inset-bottom, 0px);
+            width: min(460px, calc(100vw - 24px));
+            height: 64px;
+            border-radius: 22px;
             background: var(--bg-nav);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-dock);
         }
 
         .bottom-nav-inner {
-            max-width: 720px;
-            height: var(--nav-h);
-            margin: 0 auto;
+            height: 100%;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             align-items: center;
-            padding: 0 6px;
+            padding: 0 7px;
         }
 
         .nav-tab {
-            height: 100%;
+            height: 48px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 3px;
             color: var(--text-muted);
-            font-size: 0.67rem;
+            font-size: 0.66rem;
             font-weight: 700;
-            transition: color 0.15s ease;
+            transition: all 0.16s ease;
         }
+        .nav-tab:active { transform: scale(0.93); }
         .nav-tab.active {
-            color: var(--teal);
+            color: var(--accent-text);
+            background: var(--accent-soft);
         }
 
         .nav-add-wrap {
@@ -1252,53 +1391,30 @@
         }
 
         .nav-add-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--teal), #0284c7);
+            width: 46px;
+            height: 46px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #4f46e5, #0ea5e9);
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px -4px rgba(13, 148, 136, 0.52);
-            transform: translateY(-6px);
-            transition: transform 0.16s ease, box-shadow 0.16s ease;
+            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.52);
+            transition: transform 0.16s ease;
         }
-        .nav-add-btn:active {
-            transform: translateY(-4px) scale(0.94);
-        }
-
-        @media (min-width: 760px) {
-            .bottom-nav {
-                left: 50%;
-                right: auto;
-                bottom: 16px;
-                transform: translateX(-50%);
-                width: min(560px, calc(100vw - 32px));
-                height: 62px;
-                padding-bottom: 0;
-                border-radius: 22px;
-                border: 1px solid var(--border);
-                box-shadow: var(--shadow-lg);
-            }
-            .bottom-nav-inner {
-                height: 62px;
-            }
-            .app-main {
-                padding-bottom: 104px;
-            }
-        }
+        .nav-add-btn:hover { transform: scale(1.04); }
+        .nav-add-btn:active { transform: scale(0.92); }
 
         /* =====================================================================
-           9. BOTTOM SHEET MODALS & WA IMPORTER LIST
+           9. BOTTOM SHEET MODALS & WA IMPORTER
            ===================================================================== */
         .sheet-backdrop {
             position: fixed;
             inset: 0;
             z-index: 60;
-            background: rgba(15, 23, 42, 0.56);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(9, 10, 13, 0.56);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -1310,18 +1426,27 @@
             max-width: 560px;
             max-height: 90vh;
             background: var(--bg-surface);
-            border-radius: 22px 22px 0 0;
+            border-radius: 26px 26px 0 0;
             border: 1px solid var(--border);
             border-bottom: none;
             box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            animation: sheetUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: sheetUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sheet-grab {
+            width: 38px;
+            height: 4px;
+            border-radius: 999px;
+            background: var(--border-strong);
+            margin: 9px auto 0;
+            flex-shrink: 0;
         }
 
         @keyframes sheetUp {
-            from { transform: translateY(24px); opacity: 0.7; }
+            from { transform: translateY(26px); opacity: 0.72; }
             to { transform: translateY(0); opacity: 1; }
         }
 
@@ -1331,13 +1456,14 @@
                 padding: 16px;
             }
             .sheet-box {
-                border-radius: 22px;
+                border-radius: 24px;
                 border-bottom: 1px solid var(--border);
             }
+            .sheet-grab { display: none; }
         }
 
         .sheet-head {
-            padding: 14px 16px;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -1348,12 +1474,13 @@
 
         .sheet-title {
             margin: 0;
-            font-size: 0.98rem;
+            font-size: 1.03rem;
             font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
         .sheet-body {
-            padding: 16px;
+            padding: 16px 18px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -1361,7 +1488,7 @@
         }
 
         .sheet-foot {
-            padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+            padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
             border-top: 1px solid var(--border);
             background: var(--bg-surface);
             display: flex;
@@ -1371,7 +1498,6 @@
             flex-shrink: 0;
         }
 
-        /* WA Importer Preview Rows */
         .wa-list {
             display: flex;
             flex-direction: column;
@@ -1383,15 +1509,13 @@
         .wa-row {
             display: flex;
             align-items: flex-start;
-            gap: 9px;
-            padding: 10px;
-            border-radius: var(--r-md);
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 13px;
             background: var(--bg-input);
             border: 1px solid var(--border);
         }
-        .wa-row.is-dup {
-            opacity: 0.55;
-        }
+        .wa-row.is-dup { opacity: 0.55; }
 
         .wa-row-info {
             flex: 1;
@@ -1421,11 +1545,11 @@
            ===================================================================== */
         .toast-wrap {
             position: fixed;
-            top: calc(var(--header-h) + 10px);
+            top: calc(var(--header-h) + 12px);
             left: 50%;
             transform: translateX(-50%);
             z-index: 80;
-            width: min(92vw, 420px);
+            width: min(92vw, 410px);
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -1434,21 +1558,23 @@
 
         .toast {
             pointer-events: auto;
-            padding: 10px 14px;
-            border-radius: var(--r-md);
+            padding: 11px 16px;
+            border-radius: 14px;
             font-size: 0.8rem;
             font-weight: 700;
             color: #ffffff;
             background: #0f172a;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-bento-hover);
             display: flex;
             align-items: center;
+            justify-content: center;
+            text-align: center;
             gap: 8px;
-            animation: viewIn 0.16s ease-out;
+            animation: fadeSlideUp 0.16s ease-out;
         }
         .toast.success { background: #059669; }
-        .toast.error { background: #dc2626; }
-        .toast.info { background: #0284c7; }
+        .toast.error { background: #e11d48; }
+        .toast.info { background: #334155; }
 
         @media (max-width: 420px) {
             .filter-grid-3 { grid-template-columns: 1fr; }
@@ -1459,15 +1585,15 @@
 </head>
 <body>
     <!-- =====================================================================
-         TOP STICKY HEADER
+         TOP STICKY EDITORIAL HEADER
          ===================================================================== -->
     <header class="app-header">
         <div class="header-inner">
             <div class="brand">
                 <div class="brand-mark" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"></polygon>
                     </svg>
                 </div>
                 <div class="brand-text">
@@ -1488,10 +1614,10 @@
                 </div>
 
                 <button type="button" id="btnThemeToggle" class="icon-btn" aria-label="Tukar Tema">
-                    <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg id="iconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                    <svg id="iconSun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg id="iconSun" class="hidden" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -1516,83 +1642,90 @@
     <main class="app-main">
         <!-- TAB 1: UTAMA / HOME -->
         <section id="viewHome" class="view-pane">
-            <!-- Row 1: Category Chips (Semua / Makan / Tempat / Aktiviti) -->
-            <div id="homeCatChips" class="chip-scroll"></div>
-
-            <!-- Row 2: Direct State Dropdown + Nearby GPS Button + Reset -->
-            <div class="home-filter-row">
-                <div class="home-state-wrap">
-                    <span class="home-state-icon" aria-hidden="true">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                    </span>
-                    <select id="homeStateSelect" class="home-state-select" aria-label="Tapis ikut negeri"></select>
-                    <span class="home-state-chevron" aria-hidden="true">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </span>
+            <!-- Modular Bento Control Grid -->
+            <div class="bento-controls">
+                <!-- Bento Tile A: Category Selector -->
+                <div class="bento-tile">
+                    <div id="homeCatChips" class="chip-scroll"></div>
                 </div>
 
-                <button type="button" id="btnHomeNearby" class="home-nearby-btn" aria-pressed="false">
-                    <svg id="iconHomeNearby" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="7"></circle>
-                        <circle cx="12" cy="12" r="2.2" fill="currentColor"></circle>
-                        <line x1="12" y1="2" x2="12" y2="5"></line>
-                        <line x1="12" y1="19" x2="12" y2="22"></line>
-                        <line x1="2" y1="12" x2="5" y2="12"></line>
-                        <line x1="19" y1="12" x2="22" y2="12"></line>
-                    </svg>
-                    <span id="lblHomeNearby">Berdekatan</span>
-                </button>
+                <!-- Bento Tile B: State Dropdown + Nearby GPS + Reset -->
+                <div class="bento-tile">
+                    <div class="home-filter-row">
+                        <div class="home-state-wrap">
+                            <span class="home-state-icon" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </span>
+                            <select id="homeStateSelect" class="home-state-select" aria-label="Tapis ikut negeri"></select>
+                            <span class="home-state-chevron" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
 
-                <button type="button" id="btnHomeReset" class="home-reset-chip hidden">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                    <span id="lblHomeReset">Reset</span>
-                </button>
-            </div>
-
-            <!-- Nearby Active Panel (Detected GPS Area + Radius Filter + Manual Area Switcher) -->
-            <div id="homeNearbyPanel" class="nearby-banner hidden">
-                <div class="nearby-head">
-                    <div class="nearby-loc-info">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-                            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
-                        </svg>
-                        <span id="nearbyLocText" class="nearby-loc-text"></span>
-                    </div>
-                    <div class="nearby-head-actions">
-                        <button type="button" id="btnNearbyChange" class="nearby-mini-btn"></button>
-                        <button type="button" id="btnNearbyRefresh" class="nearby-mini-btn icon-only" aria-label="Refresh GPS">
-                            <svg id="iconNearbySpin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="23 4 23 10 17 10"></polyline>
-                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        <button type="button" id="btnHomeNearby" class="home-nearby-btn" aria-pressed="false">
+                            <svg id="iconHomeNearby" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="7"></circle>
+                                <circle cx="12" cy="12" r="2.2" fill="currentColor"></circle>
+                                <line x1="12" y1="2" x2="12" y2="5"></line>
+                                <line x1="12" y1="19" x2="12" y2="22"></line>
+                                <line x1="2" y1="12" x2="5" y2="12"></line>
+                                <line x1="19" y1="12" x2="22" y2="12"></line>
                             </svg>
+                            <span id="lblHomeNearby">Berdekatan</span>
                         </button>
-                        <button type="button" id="btnNearbyClose" class="nearby-mini-btn icon-only close" aria-label="Close Nearby">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+
+                        <button type="button" id="btnHomeReset" class="home-reset-chip hidden">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
+                            <span id="lblHomeReset">Reset</span>
                         </button>
                     </div>
                 </div>
-                <div id="nearbyRadiusChips" class="chip-scroll"></div>
-                <div id="nearbyManualRow" class="nearby-manual-row hidden">
-                    <div id="nearbyWarnTxt" class="nearby-warn-txt hidden"></div>
-                    <select id="nearbyManualSelect" class="select-field" style="padding:8px 11px; font-size:0.81rem;"></select>
+
+                <!-- Full-Width Bento Strip: Nearby Active Panel -->
+                <div id="homeNearbyPanel" class="nearby-banner bento-sub-strip hidden">
+                    <div class="nearby-head">
+                        <div class="nearby-loc-info">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                            </svg>
+                            <span id="nearbyLocText" class="nearby-loc-text"></span>
+                        </div>
+                        <div class="nearby-head-actions">
+                            <button type="button" id="btnNearbyChange" class="nearby-mini-btn"></button>
+                            <button type="button" id="btnNearbyRefresh" class="nearby-mini-btn icon-only" aria-label="Refresh GPS">
+                                <svg id="iconNearbySpin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                            </button>
+                            <button type="button" id="btnNearbyClose" class="nearby-mini-btn icon-only close" aria-label="Close Nearby">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="nearbyRadiusChips" class="chip-scroll"></div>
+                    <div id="nearbyManualRow" class="nearby-manual-row hidden">
+                        <div id="nearbyWarnTxt" class="nearby-warn-txt hidden"></div>
+                        <select id="nearbyManualSelect" class="select-field" style="padding:8px 11px; font-size:0.81rem;"></select>
+                    </div>
                 </div>
+
+                <!-- Full-Width Bento Strip: Auto District Chips -->
+                <div id="homeDistrictChips" class="chip-scroll bento-sub-strip hidden"></div>
             </div>
 
-            <!-- Row 3 (Auto): District / Area Filter Chips when a State is selected -->
-            <div id="homeDistrictChips" class="chip-scroll hidden"></div>
-
-            <!-- Cards Feed & Empty State -->
+            <!-- Bento Cards Feed & Empty State -->
             <div id="homeCardsFeed" class="cards-feed"></div>
             <div id="homeEmptyState" class="empty-box hidden"></div>
         </section>
@@ -1615,12 +1748,13 @@
                 </button>
             </div>
 
-            <div id="expCatChips" class="chip-scroll"></div>
-
-            <div class="filter-grid-3">
-                <select id="expStateSelect" class="select-field"></select>
-                <select id="expPlatSelect" class="select-field"></select>
-                <select id="expSortSelect" class="select-field"></select>
+            <div class="filter-dock">
+                <div id="expCatChips" class="chip-scroll"></div>
+                <div class="filter-grid-3">
+                    <select id="expStateSelect" class="select-field"></select>
+                    <select id="expPlatSelect" class="select-field"></select>
+                    <select id="expSortSelect" class="select-field"></select>
+                </div>
             </div>
 
             <div class="exp-meta-row">
@@ -1657,71 +1791,73 @@
 
         <!-- TAB 4: TETAPAN / SETTINGS -->
         <section id="viewSettings" class="view-pane hidden">
-            <!-- Quick Tools Card: WhatsApp Import & Backup JSON -->
-            <div class="panel-card">
-                <h2 id="setToolsTitle" class="panel-title"></h2>
-                <p id="setToolsSub" class="panel-sub"></p>
+            <div class="bento-settings-grid">
+                <!-- Quick Tools Bento Tile: WhatsApp Import & Backup JSON -->
+                <div class="panel-card">
+                    <h2 id="setToolsTitle" class="panel-title"></h2>
+                    <p id="setToolsSub" class="panel-sub"></p>
 
-                <button type="button" id="btnOpenWaImport" class="btn btn-teal btn-full">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <span id="lblOpenWaImport"></span>
-                </button>
-
-                <div class="settings-action-grid">
-                    <button type="button" id="btnExportJson" class="btn btn-soft">
-                        <span id="lblExportJson"></span>
+                    <button type="button" id="btnOpenWaImport" class="btn btn-teal btn-full">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span id="lblOpenWaImport"></span>
                     </button>
-                    <button type="button" id="btnImportJson" class="btn btn-soft">
-                        <span id="lblImportJson"></span>
-                    </button>
-                    <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden">
-                </div>
-            </div>
-
-            <!-- Firebase Live Sync Card -->
-            <div class="panel-card">
-                <h2 id="setSyncTitle" class="panel-title"></h2>
-                <p id="setSyncSub" class="panel-sub"></p>
-
-                <form id="syncForm" class="form-stack">
-                    <div class="form-field">
-                        <label for="cfgRoom" id="lblCfgRoom" class="field-lbl"></label>
-                        <input type="text" id="cfgRoom" class="input-field" autocomplete="off">
-                    </div>
-
-                    <div class="form-field">
-                        <label for="cfgDbUrl" id="lblCfgDbUrl" class="field-lbl"></label>
-                        <input type="url" id="cfgDbUrl" class="input-field" style="font-family:ui-monospace,monospace; font-size:0.79rem;" autocomplete="off">
-                    </div>
 
                     <div class="settings-action-grid">
-                        <button type="submit" id="btnSaveSync" class="btn btn-teal"></button>
-                        <button type="button" id="btnManualRefresh" class="btn btn-soft"></button>
+                        <button type="button" id="btnExportJson" class="btn btn-soft">
+                            <span id="lblExportJson"></span>
+                        </button>
+                        <button type="button" id="btnImportJson" class="btn btn-soft">
+                            <span id="lblImportJson"></span>
+                        </button>
+                        <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden">
                     </div>
-                </form>
+                </div>
 
-                <div class="form-field" style="padding-top:6px; border-top:1px solid var(--border);">
-                    <div class="field-row">
-                        <span id="lblRulesHint" class="field-lbl"></span>
-                        <button type="button" id="btnCopyRules" class="mini-chip"></button>
-                    </div>
-                    <pre class="code-block">{
+                <!-- Firebase Live Sync Bento Tile -->
+                <div class="panel-card">
+                    <h2 id="setSyncTitle" class="panel-title"></h2>
+                    <p id="setSyncSub" class="panel-sub"></p>
+
+                    <form id="syncForm" class="form-stack">
+                        <div class="form-field">
+                            <label for="cfgRoom" id="lblCfgRoom" class="field-lbl"></label>
+                            <input type="text" id="cfgRoom" class="input-field" autocomplete="off">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="cfgDbUrl" id="lblCfgDbUrl" class="field-lbl"></label>
+                            <input type="url" id="cfgDbUrl" class="input-field" style="font-family:ui-monospace,monospace; font-size:0.79rem;" autocomplete="off">
+                        </div>
+
+                        <div class="settings-action-grid">
+                            <button type="submit" id="btnSaveSync" class="btn btn-teal"></button>
+                            <button type="button" id="btnManualRefresh" class="btn btn-soft"></button>
+                        </div>
+                    </form>
+
+                    <div class="form-field" style="padding-top:10px; border-top:1px solid var(--border);">
+                        <div class="field-row">
+                            <span id="lblRulesHint" class="field-lbl"></span>
+                            <button type="button" id="btnCopyRules" class="mini-chip"></button>
+                        </div>
+                        <pre class="code-block">{
   "rules": {
     ".read": true,
     ".write": true
   }
 }</pre>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- =====================================================================
-         BOTTOM NAVIGATION BAR (5 SLOTS)
+         FLOATING ISLAND BOTTOM NAVIGATION BAR
          ===================================================================== -->
     <nav class="bottom-nav" aria-label="Navigasi Utama">
         <div class="bottom-nav-inner">
@@ -1743,7 +1879,7 @@
 
             <div class="nav-add-wrap">
                 <button type="button" id="btnNavAdd" class="nav-add-btn" aria-label="Tambah Link">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
@@ -1777,10 +1913,11 @@
          ===================================================================== -->
     <div id="placeSheet" class="sheet-backdrop hidden" role="dialog" aria-modal="true">
         <div class="sheet-box">
+            <div class="sheet-grab" aria-hidden="true"></div>
             <div class="sheet-head">
                 <h3 id="placeSheetTitle" class="sheet-title"></h3>
                 <button type="button" class="icon-btn" data-close="placeSheet" aria-label="Tutup">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
@@ -1854,10 +1991,11 @@
          ===================================================================== -->
     <div id="mapsSheet" class="sheet-backdrop hidden" role="dialog" aria-modal="true">
         <div class="sheet-box">
+            <div class="sheet-grab" aria-hidden="true"></div>
             <div class="sheet-head">
                 <h3 id="mapsSheetTitle" class="sheet-title"></h3>
                 <button type="button" class="icon-btn" data-close="mapsSheet" aria-label="Tutup">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
@@ -1895,10 +2033,11 @@
          ===================================================================== -->
     <div id="waSheet" class="sheet-backdrop hidden" role="dialog" aria-modal="true">
         <div class="sheet-box">
+            <div class="sheet-grab" aria-hidden="true"></div>
             <div class="sheet-head">
                 <h3 id="waSheetTitle" class="sheet-title"></h3>
                 <button type="button" class="icon-btn" data-close="waSheet" aria-label="Tutup">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
@@ -1943,10 +2082,11 @@
          ===================================================================== -->
     <div id="confirmSheet" class="sheet-backdrop hidden" role="dialog" aria-modal="true">
         <div class="sheet-box" style="max-width:400px;">
+            <div class="sheet-grab" aria-hidden="true"></div>
             <div class="sheet-head">
                 <h3 id="confirmTitle" class="sheet-title"></h3>
                 <button type="button" class="icon-btn" data-close="confirmSheet" aria-label="Tutup">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
@@ -2622,7 +2762,6 @@
         function guessStateAndDistrict(text) {
             const l = String(text || "").toLowerCase();
             if (!l) return { state: "", district: "" };
-            // 1. Check all known districts first (most specific)
             for (let i = 0; i < STATES.length; i++) {
                 const st = STATES[i];
                 const dists = STATE_DISTRICTS[st] || [];
@@ -2633,7 +2772,6 @@
                     }
                 }
             }
-            // 2. Check state names / aliases
             if (/\b(penang|pulau pinang)\b/i.test(l)) return { state: "Pulau Pinang", district: "" };
             if (/\b(kuala lumpur|\bkl\b)\b/i.test(l)) return { state: "WP Kuala Lumpur", district: "" };
             if (/\b(malacca|melaka)\b/i.test(l)) return { state: "Melaka", district: "" };
@@ -2965,7 +3103,6 @@
                 updatedAt: now
             });
 
-            // Optimistic UI update
             if (existing) {
                 state.items = state.items.map((x) => (x.id === item.id ? item : x));
             } else {
@@ -3065,7 +3202,7 @@
             document.documentElement.setAttribute("data-theme", state.theme);
             $("iconMoon").classList.toggle("hidden", state.theme === "dark");
             $("iconSun").classList.toggle("hidden", state.theme !== "dark");
-            $("metaThemeColor").setAttribute("content", state.theme === "dark" ? "#0b1120" : "#f8fafc");
+            $("metaThemeColor").setAttribute("content", state.theme === "dark" ? "#090a0d" : "#f2f4f7");
             try { localStorage.setItem(STORAGE_KEYS.theme, state.theme); } catch (_) {}
         }
 
@@ -3078,13 +3215,11 @@
         function populateStaticSelects() {
             const d = t();
 
-            // Search / Explore State Select
             $("expStateSelect").innerHTML =
                 '<option value="all">' + esc(d.allStates) + '</option>' +
                 STATES.map((st) => '<option value="' + esc(st) + '">' + esc(labelState(st)) + '</option>').join("");
             $("expStateSelect").value = state.expState;
 
-            // Search / Explore Platform Select
             $("expPlatSelect").innerHTML =
                 '<option value="all">' + esc(d.allPlatforms) + '</option>' +
                 '<option value="facebook">Facebook</option>' +
@@ -3095,7 +3230,6 @@
                 '<option value="web">Web</option>';
             $("expPlatSelect").value = state.expPlat;
 
-            // Search / Explore Sort Select
             $("expSortSelect").innerHTML =
                 '<option value="newest">' + esc(d.sortNewest) + '</option>' +
                 '<option value="oldest">' + esc(d.sortOldest) + '</option>' +
@@ -3103,7 +3237,6 @@
                 '<option value="nearest">' + esc(d.sortNearest) + '</option>';
             $("expSortSelect").value = state.expSort;
 
-            // Nearby Manual Area Picker (Grouped by State)
             const curManual = $("nearbyManualSelect").value || "";
             const manualGroups = STATES.map((st) => {
                 const dists = (STATE_DISTRICTS[st] || []).filter((dn) => Boolean(DISTRICT_COORDS[dn.toLowerCase()]));
@@ -3118,7 +3251,6 @@
             $("nearbyManualSelect").innerHTML = '<option value="">' + esc(d.nearbyManualPh) + '</option>' + manualGroups;
             if (curManual) $("nearbyManualSelect").value = curManual;
 
-            // Spin Category & State Dropdowns
             $("spinCatSelect").innerHTML =
                 '<option value="all">' + esc(d.catAll) + '</option>' +
                 CATEGORIES.map((c) => '<option value="' + c + '">' + esc(labelCat(c)) + '</option>').join("");
@@ -3129,7 +3261,6 @@
                 STATES.map((st) => '<option value="' + esc(st) + '">' + esc(labelState(st)) + '</option>').join("");
             $("spinStateSelect").value = state.spinState;
 
-            // Add/Edit Form State Dropdown
             const curFormState = $("fieldState").value || "Selangor";
             $("fieldState").innerHTML = STATES.map((st) => '<option value="' + esc(st) + '">' + esc(labelState(st)) + '</option>').join("");
             $("fieldState").value = mapState(curFormState);
@@ -3158,28 +3289,23 @@
             document.title = d.brandTitle;
             setSyncStatus(state.syncStatus);
 
-            // Nav labels
             $("navLblHome").textContent = d.navHome;
             $("navLblExplore").textContent = d.navExplore;
             $("navLblSpin").textContent = d.navSpin;
             $("navLblSettings").textContent = d.navSettings;
 
-            // Home labels
             $("lblHomeReset").textContent = d.resetShort;
             $("homeStateSelect").setAttribute("aria-label", d.homeStateAria);
             $("lblHomeNearby").textContent = state.nearby.loading ? d.nearbyLocating : d.nearbyBtn;
             $("btnNearbyChange").textContent = d.nearbyChange;
 
-            // Explore labels
             $("expSearchInput").placeholder = d.searchPh;
             $("btnExpReset").textContent = d.resetShort;
 
-            // Spin labels
             $("spinTitle").textContent = d.spinTitle;
             $("spinSub").textContent = d.spinSub;
             $("btnSpinGo").textContent = state.spinWinnerId ? d.spinBtnAgain : d.spinBtn;
 
-            // Settings labels
             $("setToolsTitle").textContent = d.setToolsTitle;
             $("setToolsSub").textContent = d.setToolsSub;
             $("lblOpenWaImport").textContent = d.openWaImport;
@@ -3194,7 +3320,6 @@
             $("lblRulesHint").textContent = d.lblRulesHint;
             $("btnCopyRules").textContent = d.btnCopyRules;
 
-            // Place Form labels
             $("lblFieldUrl").textContent = d.lblUrl;
             $("fieldUrl").placeholder = d.phUrl;
             $("lblFieldTitle").textContent = d.lblTitle;
@@ -3212,12 +3337,10 @@
             $("fieldNotes").placeholder = d.phNotes;
             $("btnCancelPlace").textContent = d.btnCancel;
 
-            // Maps modal labels
             $("mapsSheetTitle").textContent = d.mapsModalTitle;
             $("lblMapsQuery").textContent = d.lblMapsQuery;
             $("helpMapsQuery").textContent = d.helpMapsQuery;
 
-            // WA modal labels
             $("waSheetTitle").textContent = d.waModalTitle;
             $("waSheetDesc").textContent = d.waModalDesc;
             $("lblWaPickFile").textContent = d.waPickFile;
@@ -3226,7 +3349,6 @@
             $("btnWaScan").textContent = d.waScanBtn;
             $("btnWaCancel").textContent = d.btnCancel;
 
-            // Confirm modal labels
             $("confirmTitle").textContent = d.confirmTitle;
             $("btnConfirmCancel").textContent = d.btnCancel;
             $("btnConfirmDelete").textContent = d.btnDelete;
@@ -3239,7 +3361,7 @@
         }
 
         // =====================================================================
-        // 8. COMPACT CARD BUILDER & VIEW RENDERERS
+        // 8. BENTO TILE CARD BUILDER & VIEW RENDERERS
         // =====================================================================
         function buildCardHtml(item, forSpin, distObj) {
             const d = t();
@@ -3248,21 +3370,28 @@
             const href = sanitizeUrl(item.url);
             const distText = distObj ? formatDistance(distObj) : "";
 
-            const badgesHtml =
-                '<div class="card-badges">' +
-                    '<span class="cat-pill cat-' + cat + '">' + CAT_ICONS[cat] + '<span>' + esc(labelCat(cat)) + '</span></span>' +
-                    '<span class="state-pill">' +
-                        '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>' +
-                        esc(formatLocation(item)) +
-                    '</span>' +
-                    (distText
-                        ? '<span class="dist-pill">' +
-                              '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>' +
-                              esc(distText) +
-                          '</span>'
-                        : ''
-                    ) +
-                    '<span class="plat-pill"><span class="plat-dot ' + plat.dot + '"></span>' + esc(plat.label) + '</span>' +
+            const headHtml =
+                '<div class="bento-card-head">' +
+                    '<div class="bento-cat-group">' +
+                        '<div class="bento-cat-ico cat-' + cat + '" aria-hidden="true">' + CAT_ICONS[cat] + '</div>' +
+                        '<div class="bento-cat-meta">' +
+                            '<span class="bento-cat-label cat-' + cat + '">' + esc(labelCat(cat)) + '</span>' +
+                            '<span class="bento-loc-line">' +
+                                '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>' +
+                                '<span>' + esc(formatLocation(item)) + '</span>' +
+                            '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="bento-head-right">' +
+                        (distText
+                            ? '<span class="dist-pill">' +
+                                  '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>' +
+                                  esc(distText) +
+                              '</span>'
+                            : ''
+                        ) +
+                        '<span class="plat-pill"><span class="plat-dot ' + plat.dot + '"></span>' + esc(plat.label) + '</span>' +
+                    '</div>' +
                 '</div>';
 
             const titleHtml = href
@@ -3275,8 +3404,8 @@
 
             const openBtnHtml = href
                 ? '<a class="open-link-btn" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' +
-                      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>' +
                       '<span>' + esc(d.openLink) + '</span>' +
+                      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>' +
                   '</a>'
                 : '';
 
@@ -3306,8 +3435,8 @@
             );
 
             return (
-                '<article class="place-card">' +
-                    badgesHtml +
+                '<article class="place-card" data-cat="' + cat + '">' +
+                    headHtml +
                     '<div class="card-main">' + titleHtml + noteHtml + '</div>' +
                     '<div class="card-footer">' +
                         '<div class="card-primary-actions">' + openBtnHtml + mapsBtnHtml + '</div>' +
@@ -3366,7 +3495,6 @@
                 counts[it.state] = (counts[it.state] || 0) + 1;
             });
 
-            // Put states that have items at the top for fast access
             const withItems = STATES.filter((st) => (counts[st] || 0) > 0);
             const withoutItems = STATES.filter((st) => !(counts[st] || 0));
             const ordered = [...withItems, ...withoutItems];
@@ -3385,7 +3513,6 @@
             const isNearbyOn = state.nearby.active;
             const hasUserGps = isValidCoordPair(state.nearby.lat, state.nearby.lng);
 
-            // Row 1: Category Chips
             $("homeCatChips").innerHTML =
                 '<button type="button" class="chip' + (state.homeCat === "all" ? " active-all" : "") + '" data-home-cat="all">' + esc(d.catAll) + '</button>' +
                 CATEGORIES.map((c) =>
@@ -3395,14 +3522,12 @@
                     '</button>'
                 ).join("");
 
-            // Row 2: State Dropdown + Nearby Button
             renderHomeStateSelect();
             $("btnHomeNearby").classList.toggle("is-active", isNearbyOn);
             $("btnHomeNearby").setAttribute("aria-pressed", isNearbyOn ? "true" : "false");
             $("lblHomeNearby").textContent = state.nearby.loading ? d.nearbyLocating : d.nearbyBtn;
             $("iconHomeNearby").classList.toggle("spin-anim", state.nearby.loading);
 
-            // Nearby Active Panel
             const nearbyPanel = $("homeNearbyPanel");
             if (isNearbyOn) {
                 nearbyPanel.classList.remove("hidden");
@@ -3416,7 +3541,7 @@
                     $("nearbyRadiusChips").innerHTML = NEARBY_RADII.map((km) => {
                         const active = state.nearby.radiusKm === km;
                         const lbl = km === 0 ? d.nearbyAllRadius : d.nearbyRadiusKm(km);
-                        return '<button type="button" class="chip chip-sm' + (active ? " active-teal" : "") + '" data-nearby-radius="' + km + '">' + esc(lbl) + '</button>';
+                        return '<button type="button" class="chip chip-sm' + (active ? " active-tempat" : "") + '" data-nearby-radius="' + km + '">' + esc(lbl) + '</button>';
                     }).join("");
                 }
 
@@ -3428,7 +3553,6 @@
                 nearbyPanel.classList.add("hidden");
             }
 
-            // Row 3: Dynamic District Chips when a State is selected
             const distWrap = $("homeDistrictChips");
             if (state.homeState !== "all") {
                 const distMap = new Map();
@@ -3467,7 +3591,6 @@
                 distWrap.classList.add("hidden");
             }
 
-            // Filter & Sort Feed
             let rows = state.items
                 .filter((it) => {
                     if (state.homeCat !== "all" && it.category !== state.homeCat) return false;
@@ -3818,7 +3941,6 @@
                 const urls = line.match(/https?:\/\/[^\s"'<>]+/gi);
                 if (!urls) return;
 
-                // Strip WhatsApp timestamp/sender prefix
                 const cleanLine = line
                     .replace(/^\[?\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4},?\s+\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM|am|pm)?\]?\s*-?\s*/, "")
                     .replace(/^[^:]{1,40}:\s+/, "");
@@ -3888,7 +4010,7 @@
                 const plat = detectPlatform(row.url);
                 return (
                     '<label class="wa-row' + (row.isDup ? " is-dup" : "") + '">' +
-                        '<input type="checkbox" data-wa-idx="' + idx + '"' + (row.selected ? " checked" : "") + ' style="margin-top:3px; accent-color:var(--teal);">' +
+                        '<input type="checkbox" data-wa-idx="' + idx + '"' + (row.selected ? " checked" : "") + ' style="margin-top:3px; accent-color:var(--accent);">' +
                         '<div class="wa-row-info">' +
                             '<div class="wa-row-title">' + esc(row.title) + '</div>' +
                             '<div class="wa-row-meta">' +
